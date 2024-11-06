@@ -1,0 +1,26 @@
+local Players = game:GetService("Players")
+local TeleportService = game:GetService("TeleportService")
+local gameId = 7239319209
+
+local function onCharacterAdded(character)
+	local moneyPrinter = workspace:FindFirstChild("Money Printer")
+	if moneyPrinter then
+		local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+		humanoidRootPart.CFrame = moneyPrinter.CFrame
+
+		local proximityPrompt = moneyPrinter:FindFirstChildOfClass("ProximityPrompt")
+		if proximityPrompt then
+			proximityPrompt:InputHoldBegin()
+		end
+	else
+		TeleportService:Teleport(gameId, Players.LocalPlayer)
+	end
+end
+
+Players.PlayerAdded:Connect(function(player)
+	player.CharacterAdded:Connect(onCharacterAdded)
+end)
+
+for _, player in Players:GetPlayers() do
+	player.CharacterAdded:Connect(onCharacterAdded)
+end
